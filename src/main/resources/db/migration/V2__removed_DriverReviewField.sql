@@ -1,0 +1,5 @@
+ALTER TABLE driver_review
+DROP
+FOREIGN KEY FK_DRIVER_REVIEW_ON_DRIVER;
+
+DROP TABLE driver_review;
