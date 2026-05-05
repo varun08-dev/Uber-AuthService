@@ -1,5 +1,6 @@
 package org.varun.uberauthservice.Services;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.varun.uberauthservice.Dtos.PassengerDto;
 import org.varun.uberauthservice.Dtos.PassengerSignUpRequestDto;
@@ -11,8 +12,11 @@ public class AuthService {
 
     private  final PassengerRepository passengerRepository;
 
-    public AuthService(PassengerRepository passengerRepository) {
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public AuthService(PassengerRepository passengerRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.passengerRepository = passengerRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public PassengerDto passengerSignUp(PassengerSignUpRequestDto passengerSignUpRequestDto) {
@@ -21,7 +25,7 @@ public class AuthService {
                 .name(passengerSignUpRequestDto.getName())
                 .email(passengerSignUpRequestDto.getEmail())
                 .phoneNumber(passengerSignUpRequestDto.getPhoneNumber())
-                .password(passengerSignUpRequestDto.getPassword())    //todo:have to hash password
+                .password(bCryptPasswordEncoder.encode(passengerSignUpRequestDto.getPassword())) //todo:have to hash password
                 .build();
 
         passengerRepository.save(passenger);
